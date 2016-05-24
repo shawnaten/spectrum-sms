@@ -1,0 +1,7 @@
+indexes:
+
+- kind: Response
+  properties:
+  - name: state
+  - name: substate
+  - name: tag
