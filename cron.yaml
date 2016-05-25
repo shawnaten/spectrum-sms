@@ -1,0 +1,4 @@
+cron:
+- description: daily calendar sync
+  url: /tasks/calendar
+  schedule: every day 00:00
