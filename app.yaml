@@ -13,11 +13,11 @@ handlers:
   static_dir: static
   secure: always
 
-- url: /tasks
+- url: /tasks/.*
   script: tasks.app
   login: admin
 
-- url: .*
+- url: /.*
   script: main.app
   secure: always
 
