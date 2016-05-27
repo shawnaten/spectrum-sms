@@ -46,3 +46,4 @@ fabric.properties
 # For this project
 lib
 strings.py
+app_engine_dev_secret.pem
