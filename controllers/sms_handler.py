@@ -16,10 +16,6 @@ from models.account import Account
 class SMSHandler(webapp2.RequestHandler):
     def get(self):
 
-        # Sending messages separately, send empty TwiML for now.
-        twiml = twilio.twiml.Response()
-        self.response.write(twiml)
-
         # Validate that request came from Twilio service.
         validator = RequestValidator(strings.AUTH_TOKEN)
         url = self.request.url
@@ -28,7 +24,12 @@ class SMSHandler(webapp2.RequestHandler):
 
         if not validator.validate(url, {}, signature):
             logging.warn("Request did not come from Twilio.")
+            self.response.status = 403
             return
+
+        # Sending messages separately, send empty TwiML for now.
+        twiml = twilio.twiml.Response()
+        self.response.write(twiml)
 
         phone = self.request.get("From", None)
 
