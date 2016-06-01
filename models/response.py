@@ -6,6 +6,7 @@ TAG_ERROR = "error"
 TAG_CANCEL = "cancel"
 TAG_MENU = "menu"
 TAG_TIMEOUT = "timeout"
+TAG_REMINDER = "reminder"
 
 VAR_NAME = "[NAME]"
 VAR_EMAIL = "[EMAIL]"
