@@ -2,6 +2,7 @@ from twilio.rest import TwilioRestClient
 
 import models.account as account_model
 import models.response as response_model
+import response_strings
 import strings
 
 COMMAND_MENU = "menu"
@@ -15,13 +16,13 @@ def controller(request, account):
     message = message.lower()
 
     if message == COMMAND_MENU:
-        response = response_model.get(None, None, response_model.TAG_MENU)
+        response = response_model.get_response(response_strings.MENU)
     elif message == COMMAND_DELETE:
         account.state = account_model.STATE_DELETE
-        response = response_model.get(account_model.STATE_DELETE, None, response_model.TAG_START)
+        response = response_model.get_response(response_strings.DELETE_CONFIRM)
     else:
-        response = response_model.get(None, None, None, response_model.VAR_NAME)
-        response = response.replace(response_model.VAR_NAME, account.first)
+        response = response_model.get_response(response_strings.NO_MATCH, response_strings.VAR_NAME)
+        response = response.replace(response_strings.VAR_NAME, account.first)
 
     account.put()
     twilio_client.messages.create(to=account.phone, from_=strings.SERVICE_NUMBER, body=response)

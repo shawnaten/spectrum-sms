@@ -11,6 +11,8 @@ from google.appengine.ext import deferred
 from httplib2 import Http
 from oauth2client.contrib.appengine import AppAssertionCredentials
 
+import models.response as response
+import response_strings
 from models.account import Account
 from models.event import Event
 from models.service_settings import ServiceSettings
@@ -68,9 +70,11 @@ def send_event_reminders(key):
 
     client = TwilioRestClient(strings.ACCOUNT_SID, strings.AUTH_TOKEN)
 
+    response_body = response.get_response(response_strings.EVENT_REMINDER, response_strings.VAR_SUMMARY,
+                                          response_strings.VAR_TIME, response_strings.VAR_DESCRIPTION)
+
     for account in accounts:
-        response_body = response_model.get(None, None, response_model.TAG_REMINDER)
-        client.messages.create(to=account.phone, from_=strings.SERVICE_NUMBER, body=response_body+event.summary)
+        client.messages.create(to=account.phone, from_=strings.SERVICE_NUMBER, body=response_body)
     
 
 class CalendarHandler(webapp2.RequestHandler):

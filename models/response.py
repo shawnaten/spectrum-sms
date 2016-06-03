@@ -1,53 +1,33 @@
 from google.appengine.ext import ndb
 
-TAG_START = "start"
-TAG_END = "end"
-TAG_ERROR = "error"
-TAG_CANCEL = "cancel"
-TAG_MENU = "menu"
-TAG_TIMEOUT = "timeout"
-TAG_REMINDER = "reminder"
 
-VAR_NAME = "[NAME]"
-VAR_EMAIL = "[EMAIL]"
-VAR_URL = "[URL]"
-VAR_CLASS = "[CLASS]"
+def get_response(description, *text_vars):
 
-
-def get(state, substate, tag, *variables):
-
-    response = Response.query().filter(
-        Response.state == state,
-        Response.substate == substate,
-        Response.tag == tag).get()
-
-    if variables is not None:
-        var_field = ""
-        for variable in variables:
-            var_field += variable + " "
-        var_field = var_field.strip()
+    if len(text_vars) == 0:
+        vars_string = None
     else:
-        var_field = None
+        vars_string = ""
+        for sub in text_vars:
+            vars_string += sub + " "
+        vars_string = vars_string.strip()
+
+    response = Response.query().filter(Response.description == description, Response.vars == vars_string).get()
 
     if response is None:
-        response = Response(state=state, substate=substate, tag=tag, vars=var_field)
+        response = Response(description=description, vars=vars_string)
         response.put()
 
-    if response.text is None:
-        text = "state: " + (state if state is not None else "none") + "\n"
-        text += "substate: " + (substate if substate is not None else "none") + "\n"
-        text += "tag: " + (tag if tag is not None else "none")
-        return text
-    else:
+    if response.text:
         return response.text
+    else:
+        return "Response not set: " + response.description + (" " + response.vars) if response.vars else ""
 
 
 class Response(ndb.Model):
-    text = ndb.StringProperty()
-    state = ndb.StringProperty()
-    substate = ndb.StringProperty()
-    tag = ndb.StringProperty()
+    description = ndb.StringProperty(required=True)
     vars = ndb.StringProperty()
+    text = ndb.StringProperty()
+
 
 
 

@@ -1,7 +1,7 @@
 from twilio.rest import TwilioRestClient
 
-import models.account as account_model
 import models.response as response_model
+import response_strings
 import strings
 
 COMMAND_YES = "yes"
@@ -16,12 +16,12 @@ def controller(request, account):
 
     if message == COMMAND_YES:
         account.key.delete()
-        response = response_model.get(account_model.STATE_DELETE, None, response_model.TAG_END)
+        response = response_model.get_response(response_strings.DELETE_COMPLETE, response_strings.VAR_NAME)
     elif message == COMMAND_NO:
         account.state = None
         account.put()
-        response = response_model.get(account_model.STATE_DELETE, None, response_model.TAG_CANCEL)
+        response = response_model.get_response(response_strings.DELETE_CANCEL)
     else:
-        response = response_model.get(account_model.STATE_DELETE, None, response_model.TAG_ERROR)
+        response = response_model.get_response(response_strings.DELETE_INPUT_ERROR)
 
     twilio_client.messages.create(to=account.phone, from_=strings.SERVICE_NUMBER, body=response)

@@ -1,9 +1,8 @@
-import logging
-
 from google.appengine.ext import ndb
 from twilio.rest import TwilioRestClient
 
 import models.response as response_model
+import response_strings
 import strings
 
 STATE_ONBOARD = "onboard"
@@ -15,7 +14,7 @@ def incomplete_handler(account_id):
     client = TwilioRestClient(strings.ACCOUNT_SID, strings.AUTH_TOKEN)
 
     if account and not account.complete:
-        response_body = response_model.get(STATE_DELETE, None, response_model.TAG_TIMEOUT)
+        response_body = response_model.get_response(response_strings.ONBOARD_TIMEOUT)
         client.messages.create(to=account.phone, from_=strings.SERVICE_NUMBER, body=response_body)
         account.key.delete()
 
