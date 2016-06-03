@@ -19,10 +19,13 @@ def controller(request, account):
         response = response_model.get_response(response_strings.MENU)
     elif message == COMMAND_DELETE:
         account.state = account_model.STATE_DELETE
+        account.put()
         response = response_model.get_response(response_strings.DELETE_CONFIRM)
     else:
-        response = response_model.get_response(response_strings.NO_MATCH, response_strings.VAR_NAME)
-        response = response.replace(response_strings.VAR_NAME, account.first)
+        response = None
 
-    account.put()
-    twilio_client.messages.create(to=account.phone, from_=strings.SERVICE_NUMBER, body=response)
+    if response:
+        twilio_client.messages.create(to=account.phone, from_=strings.SERVICE_NUMBER, body=response)
+        return True
+
+    return False
