@@ -5,6 +5,9 @@ VAR_TIME = "[TIME]"
 VAR_DESCRIPTION = "[DESCRIPTION]"
 
 
+CALL_HELLO = "Greet the user and tell them this number is only for texts, announce music."
+CALL_GOODBYE = "Say goodbye to user."
+
 EVENT_REMINDER = "Reminds user about upcoming event."
 
 MENU = "List available commands for user."
