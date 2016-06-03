@@ -7,8 +7,8 @@ def get_response(description, *text_vars):
         vars_string = None
     else:
         vars_string = ""
-        for sub in text_vars:
-            vars_string += sub + " "
+        for var in text_vars:
+            vars_string += var + " "
         vars_string = vars_string.strip()
 
     response = Response.query().filter(Response.description == description, Response.vars == vars_string).get()
@@ -20,7 +20,10 @@ def get_response(description, *text_vars):
     if response.text:
         return response.text
     else:
-        return "Response not set: " + response.description + (" " + response.vars) if response.vars else ""
+        response_string = "Response not set: " + response.description
+        if response.vars:
+            response_string += " " + response.vars
+        return response_string
 
 
 class Response(ndb.Model):

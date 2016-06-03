@@ -2,6 +2,7 @@ import logging
 
 import twilio.twiml
 import webapp2
+from twilio.rest import TwilioRestClient
 from twilio.util import RequestValidator
 
 import controllers.command_controller as command
